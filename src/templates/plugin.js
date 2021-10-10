@@ -11,9 +11,8 @@ Vue.component(SelectFile.name, SelectFile)
 
 // console.log(options)
 
-export default function (ctx, inject) {
+// export default function (ctx, inject) {
+export default function () {
   // Fully typed plugin
-  // console.log(ctx)
-  // console.log(inject)
   // console.log('loaded', ctx && 'with context', !!inject && 'and with inject')
 }

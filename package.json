@@ -30,6 +30,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@nuxt/content": "^1.14.0",
     "defu": "latest",
     "express": "^4.17.1",
     "upath": "latest"

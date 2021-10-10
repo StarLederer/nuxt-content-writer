@@ -31,7 +31,7 @@ const nuxtModule: Module<ModuleOptions> = function () {
 
   this.addServerMiddleware({
     path: '/_editor',
-    handler: getMiddleware(options.rootDir)
+    handler: getMiddleware(options)
   })
 
   this.addTemplate({

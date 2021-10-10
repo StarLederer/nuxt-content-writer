@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "defu": "latest",
+    "express": "^4.17.1",
     "upath": "latest"
   },
   "devDependencies": {

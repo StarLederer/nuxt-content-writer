@@ -1,19 +1,39 @@
+import * as fs from 'fs/promises'
+import * as path from 'path'
 import { Module, NuxtOptions } from '@nuxt/types'
 import { name, version } from '../package.json'
+import { getMiddleware } from './middleware'
 
 export interface ModuleOptions {}
 const CONFIG_KEY = 'nuxtEditor'
 
+class ContentEditor {
+  rootDir: string = '';
+
+  constructor (rootDir: string) {
+    this.rootDir = rootDir
+  }
+
+  async testFile () {
+    await fs.writeFile(path.resolve(this.rootDir, 'editor/test-file.txt'), 'Test')
+  }
+}
+
 const nuxtModule: Module<ModuleOptions> = function () {
-  // const options: NuxtOptions = this.nuxt.options
+  const options: NuxtOptions = this.nuxt.options
 
-  // if (!options.dev) { return }
+  if (!options.dev) { return }
 
-  // this.nuxt.hook('ready', () => {
-  //   console.log('test')
-  // })
+  const rootDir = options.rootDir
+  const $editor = new ContentEditor(rootDir)
 
-  console.log('Adding tempalte')
+  this.nuxt.$editor = $editor
+
+  this.addServerMiddleware({
+    path: '/_editor',
+    handler: getMiddleware(options.rootDir)
+  })
+
   this.addTemplate({
     fileName: 'editor/SelectFile.vue',
     src: require.resolve('./templates/SelectFile.vue')
@@ -21,7 +41,10 @@ const nuxtModule: Module<ModuleOptions> = function () {
 
   this.addPlugin({
     fileName: 'editor/test.js',
-    src: require.resolve('./templates/plugin')
+    src: require.resolve('./templates/plugin'),
+    options: {
+      $editor
+    }
   })
 }
 

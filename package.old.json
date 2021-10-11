@@ -1,0 +1,16 @@
+{
+  "exports": {
+    ".": {
+      "require": "./dist/module.js",
+      "import": "./dist/module.es.js"
+    },
+    "./templates/*": "./dist/templates/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

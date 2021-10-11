@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-content-editor",
+  "name": "nuxt-content-writer",
   "version": "1.0.0-beta.0",
   "description": "Enable content creators to write inside your Nuxt app",
   "keywords": [
@@ -7,7 +7,7 @@
     "module",
     "nuxt-module"
   ],
-  "repository": "HermanLederer/nuxt-content-editor",
+  "repository": "HermanLederer/nuxt-content-writer",
   "license": "MIT",
   "author": "Herman Lederer <germans.lederers@gmail.com>",
   "main": "./dist/module.js",

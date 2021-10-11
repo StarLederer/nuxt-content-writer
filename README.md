@@ -1,12 +1,21 @@
-# nuxt-editor
+# nuxt-content-writer
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![Github Actions CI][github-actions-ci-src]][github-actions-ci-href]
 [![Codecov][codecov-src]][codecov-href]
 [![License][license-src]][license-href]
 
-[📖 **Release Notes**](./CHANGELOG.md)
+> nuxt-content-writer expands @nuxt/content module functionality by
+> allowing you to edit your /content directory visually right from inside your Nuxt app
+
+- [📖 **Release Notes**](https://github.com/HermanLederer/nuxt-content-writer/releases)
+
+## Features
+
+- A file picker component
+- Delete or create new files
+- Renaming files (coming soon)
+- Customizable editors (coming in the future)
 
 ## Setup
 

@@ -1,17 +1,28 @@
 <template>
-  <div class="_editor _select-file" @mouseenter="fetchFiles">
+  <div class="_editor _select-file" @mouseenter="fetchFiles(); fileCreation.inProgress = false">
     <div class="label">
       <slot />
     </div>
     <ul>
-      <li
-        v-for="file in files"
-        :key="file"
-        @click="selectFile(`${dir}/${file}`)"
-      >
-        {{ file }}
+      <li v-for="file in files" :key="file">
+        <button @click="selectFile(file)">
+          {{ file }}
+        </button>
+        <button class="secondary" @click="deleteFile(file)">
+          X
+        </button>
       </li>
-      <li>New file</li>
+      <li v-show="fileCreation.inProgress">
+        <input ref="fileName" type="text">
+        <button class="secondary" @click="createFile($refs.fileName.value)">
+          Y
+        </button>
+      </li>
+      <li v-show="!fileCreation.inProgress">
+        <button class="new-file" @click="fileCreation.inProgress = true">
+          New
+        </button>
+      </li>
     </ul>
   </div>
 </template>
@@ -21,14 +32,23 @@ export default {
   name: 'SelectFile',
 
   props: {
+    storage: {
+      type: String,
+      default: 'editor-storage',
+      require: true
+    },
     dir: {
       type: String,
-      default: ''
+      default: '',
+      require: true
     }
   },
 
   data () {
     return {
+      fileCreation: {
+        inProgress: false
+      },
       files: []
     }
   },
@@ -43,21 +63,32 @@ export default {
         .then(response => response.json())
         .then(data => (this.files = data.contents))
     },
-    async selectFile (path) {
-      await fetch('/_editor', {
+
+    async selectFile (fileName) {
+      await fetch(`/_editor/${this.storage}.json`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ path })
+        body: JSON.stringify({ selected: `${this.dir}/${fileName}` })
       })
+    },
+
+    deleteFile (fileName) {
+      console.log(`Deleted ${this.dir}/${fileName}`)
+    },
+
+    createFile (fileName) {
+      if (!fileName) { return }
+      console.log(`Created ${this.dir}/${fileName}`)
     }
   }
 }
 </script>
 
-<style>
-._select-file * {
+<style lang="scss">
+._editor,
+._editor * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -66,34 +97,71 @@ export default {
 ._select-file {
   display: inline-block;
   cursor: pointer;
-}
 
-._select-file ul {
-  position: absolute;
-  list-style: none;
-  display: none;
-  z-index: 1;
-}
+  ul {
+    position: absolute;
+    border-radius: 0.2rem;
+    list-style: none;
+    display: none;
+    overflow: hidden;
+    z-index: 1;
+  }
 
-._select-file li,
-._select-file .label {
-  height: 2rem;
-  display: flex;
-  align-items: center;
-}
+  .label,
+  li {
+    height: 2rem;
+  }
 
-._select-file li {
-  padding: 0 1rem;
-  background: #f8f8f8;
-  border-radius: 0.2rem;
-  transition: 50ms;
-}
+  .label {
+    display: flex;
+    align-items: center;
+  }
 
-._select-file li:hover {
-  background: #fafafa;
-}
+  li {
+    background: #f8f8f8;
+    display: flex;
+  }
 
-._select-file:hover ul {
-  display: block;
+  button,
+  input {
+    padding: 0 1rem;
+
+    background: none;
+    border: none;
+    border-radius: 0.2rem;
+
+    text-align: left;
+
+    transition: 50ms;
+
+    &:first-child {
+      flex: 1;
+    }
+
+    &.secondary {
+      width: 2rem;
+      padding: 0;
+      color: #0008;
+      text-align: center;
+    }
+
+    &.new-file {
+      width: 100%;
+      color: #0008;
+    }
+
+    &:hover {
+      background: #f0f0f0;
+      color: #000;
+    }
+  }
+
+  input {
+    border: 1px solid black;
+  }
+
+  &:hover ul {
+    display: block;
+  }
 }
 </style>

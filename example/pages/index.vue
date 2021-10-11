@@ -1,6 +1,6 @@
 <template>
   <main>
-    <SelectFile :dir="'articles'">
+    <SelectFile :storage="'homepageArticle'" :dir="'articles'">
       Select article
     </SelectFile>
     <NuxtContent :document="article" />
@@ -10,8 +10,16 @@
 <script>
 export default {
   async asyncData ({ $content }) {
-    const selection = await $content('homepageArticle').fetch()
-    const article = await $content(selection.article).fetch()
+    let article
+
+    try {
+      const selection = await $content('homepageArticle').fetch()
+      const articleName = selection.selected.replace(/\.[^/.]+$/, '')
+      article = await $content(articleName).fetch()
+    } catch (err) {
+      article = null
+    }
+
     return {
       article
     }

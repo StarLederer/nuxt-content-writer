@@ -24,14 +24,15 @@ app.get('/*', async (req, res) => {
 })
 
 // POST request
-app.post('/*', (req, res) => {
-  const filePath = req.body.path.replace(/\.[^/.]+$/, '')
-  fs.writeFile(
-    path.resolve(config.rootDir, 'homepageArticle.json'),
-    JSON.stringify({ article: filePath })
-  )
+app.post('/*', async (req, res) => {
+  const filePath = path.resolve(config.rootDir + req.url)
+  const fileData = req.body
+
+  await fs.writeFile(filePath, JSON.stringify(fileData))
   res.status(200)
 })
+
+// DELETE request
 
 //
 //

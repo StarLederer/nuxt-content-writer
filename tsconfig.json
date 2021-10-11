@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "target": "es2018",
-    "allowJs": true,
+    "allowJs": false,
     "module": "esnext",
     "lib": [
       "esnext",
@@ -22,6 +22,7 @@
   "exclude": [
     "node_modules",
     "dist",
+    "test",
     "**/*.config.js"
   ]
 }

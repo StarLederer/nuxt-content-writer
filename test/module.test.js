@@ -1,25 +1,25 @@
 import {
   expectModuleToBeCalledWith,
   getNuxt,
-  setupTest,
-} from "@nuxt/test-utils";
+  setupTest
+} from '@nuxt/test-utils'
 
-describe("module", () => {
+describe('module', () => {
   setupTest({
     testDir: __dirname,
-    fixture: "../example",
+    fixture: '../example',
     config: {
       nuxtEditor: {
-        test: 123,
-      },
-    },
-  });
+        test: 123
+      }
+    }
+  })
 
-  test("should inject plugin", () => {
-    expectModuleToBeCalledWith("addPlugin", {
+  test('should inject plugin', () => {
+    expectModuleToBeCalledWith('addPlugin', {
       src: expect.stringMatching(/templates[\\/]plugin/),
-      fileName: expect.stringContaining("myPlugin"),
-      options: getNuxt().options.nuxtEditor,
-    });
-  });
-});
+      fileName: expect.stringContaining('myPlugin'),
+      options: getNuxt().options.nuxtEditor
+    })
+  })
+})

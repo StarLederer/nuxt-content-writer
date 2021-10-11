@@ -1,6 +1,6 @@
 {
   "name": "nuxt-content-writer",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Enable content creators to write inside your Nuxt app",
   "keywords": [
     "nuxt",
@@ -19,7 +19,6 @@
     "build": "siroc build",
     "dev": "nuxt example",
     "lint": "eslint --ext .js,.ts,.vue .",
-    "release": "yarn build && yarn lint && yarn test && standard-version && git push --follow-tags && npm publish",
     "test": "jest"
   },
   "dependencies": {

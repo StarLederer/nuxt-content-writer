@@ -9,7 +9,7 @@ module.exports = {
     ]
   },
   moduleNameMapper: {
-    nuxt-editor: '<rootDir>/src'
+    'nuxt-content-writer': '<rootDir>/src'
   },
   collectCoverage: true,
   collectCoverageFrom: ['src/**']

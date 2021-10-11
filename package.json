@@ -19,7 +19,8 @@
     "build": "siroc build",
     "dev": "nuxt example",
     "lint": "eslint --ext .js,.ts,.vue .",
-    "test": "jest"
+    "test": "jest",
+    "release": "yarn build && npm publish"
   },
   "dependencies": {
     "@nuxt/content": "^1.14.0",

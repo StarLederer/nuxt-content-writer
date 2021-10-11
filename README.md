@@ -10,18 +10,18 @@
 
 ## Setup
 
-1. Add `nuxt-editor` dependency to your project
+1. Add `nuxt-content-writer` dependency to your project
 
 ```bash
 yarn add nuxt-editor # or npm install nuxt-editor
 ```
 
-2. Add `nuxt-editor` to the `modules` section of `nuxt.config.js`
+2. Add `nuxt-content-writer` to the `modules` section of `nuxt.config.js`
 
 ```js
 {
   modules: [
-    'nuxt-editor',
+    'nuxt-content-writer',
   ],
   nuxtEditor: {
     // module options
@@ -41,13 +41,13 @@ yarn add nuxt-editor # or npm install nuxt-editor
 
 <!-- Badges -->
 
-[npm-version-src]: https://img.shields.io/npm/v/nuxt-editor/latest.svg
-[npm-version-href]: https://npmjs.com/package/nuxt-editor
-[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-editor.svg
-[npm-downloads-href]: https://npmjs.com/package/nuxt-editor
-[github-actions-ci-src]: https://github.com/HermanLederer/nuxt-editor/workflows/ci/badge.svg
-[github-actions-ci-href]: https://github.com/HermanLederer/nuxt-editor/actions?query=workflow%3Aci
-[codecov-src]: https://img.shields.io/codecov/c/github/HermanLederer/nuxt-editor.svg
-[codecov-href]: https://codecov.io/gh/HermanLederer/nuxt-editor
-[license-src]: https://img.shields.io/npm/l/nuxt-editor.svg
-[license-href]: https://npmjs.com/package/nuxt-editor
+[npm-version-src]: https://img.shields.io/npm/v/nuxt-content-writer/latest.svg
+[npm-version-href]: https://npmjs.com/package/nuxt-content-writer
+[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-content-writer.svg
+[npm-downloads-href]: https://npmjs.com/package/nuxt-content-writer
+[github-actions-ci-src]: https://github.com/HermanLederer/nuxt-content-writer/workflows/ci/badge.svg
+[github-actions-ci-href]: https://github.com/HermanLederer/nuxt-content-writer/actions?query=workflow%3Aci
+[codecov-src]: https://img.shields.io/codecov/c/github/HermanLederer/nuxt-content-writer.svg
+[codecov-href]: https://codecov.io/gh/HermanLederer/nuxt-content-writer
+[license-src]: https://img.shields.io/npm/l/nuxt-content-writer.svg
+[license-href]: https://npmjs.com/package/nuxt-content-writer

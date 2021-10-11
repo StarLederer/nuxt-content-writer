@@ -12,6 +12,9 @@
   "author": "Herman Lederer <germans.lederers@gmail.com>",
   "main": "./dist/module.js",
   "types": "./dist/module.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "siroc build",
     "dev": "nuxt example",

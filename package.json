@@ -10,6 +10,14 @@
   "repository": "HermanLederer/nuxt-content-writer",
   "license": "MIT",
   "author": "Herman Lederer <germans.lederers@gmail.com>",
+  "exports": {
+    ".": {
+      "require": "./dist/module.js",
+      "import": "./dist/module.es.js"
+    },
+    "./templates/*": "./dist/templates/*",
+    "./package.json": "./package.json"
+  },
   "main": "./dist/module.js",
   "types": "./dist/module.d.ts",
   "files": [

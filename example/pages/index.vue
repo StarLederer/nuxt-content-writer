@@ -40,4 +40,8 @@ main {
   margin: 8rem auto;
   padding: 0 2rem;
 }
+
+h3, h4, h5, h6, p {
+  margin-bottom: 1rem;
+}
 </style>

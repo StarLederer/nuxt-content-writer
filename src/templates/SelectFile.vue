@@ -1,5 +1,5 @@
 <template>
-  <div class="_editor _select-file" @mouseenter="fetchFiles(); fileCreation.inProgress = false">
+  <div class="_editor _select-file" @mouseenter="showSelector">
     <div class="label">
       <slot />
     </div>
@@ -13,13 +13,17 @@
         </button>
       </li>
       <li v-show="fileCreation.inProgress">
-        <input ref="fileName" type="text">
-        <button class="secondary" @click="createFile($refs.fileName.value)">
-          Y
-        </button>
+        <form
+          class="new-file-form"
+          :class="{ 'is-invalid': fileCreation.isInvalid }"
+          @submit="validateAndCreateFile"
+        >
+          <input ref="fileName" type="text" placeholder="Name.txt">
+          <input type="submit" value="Y" class="secondary">
+        </form>
       </li>
       <li v-show="!fileCreation.inProgress">
-        <button class="new-file" @click="fileCreation.inProgress = true">
+        <button class="new-file" @click="openCreateFileEditor">
           New
         </button>
       </li>
@@ -47,7 +51,8 @@ export default {
   data () {
     return {
       fileCreation: {
-        inProgress: false
+        inProgress: false,
+        isInvalid: false
       },
       files: []
     }
@@ -74,13 +79,49 @@ export default {
       })
     },
 
-    deleteFile (fileName) {
-      console.log(`Deleted ${this.dir}/${fileName}`)
+    async deleteFile (fileName) {
+      await fetch(`/_editor/${this.dir}/${fileName}`, { method: 'DELETE' })
+      this.fetchFiles()
     },
 
-    createFile (fileName) {
-      if (!fileName) { return }
-      console.log(`Created ${this.dir}/${fileName}`)
+    async createFile (fileName) {
+      await fetch(`/_editor/${this.dir}/${fileName}`, {
+        method: 'POST'
+      })
+
+      this.fetchFiles()
+    },
+
+    validateAndCreateFile (e) {
+      const fileName = this.$refs.fileName.value
+
+      if (!fileName) {
+        this.fileCreation.isInvalid = true
+        this.$refs.fileName.focus()
+      } else {
+        this.$refs.fileName.value = ''
+        this.$refs.fileName.focus()
+        this.createFile(fileName)
+      }
+
+      e.preventDefault()
+    },
+
+    openCreateFileEditor () {
+      this.fileCreation.inProgress = true
+      this.fileCreation.isInvalid = false
+      window.requestAnimationFrame(() => {
+        this.$refs.fileName.focus()
+      })
+    },
+
+    showSelector () {
+      this.fetchFiles()
+      if (!this.$refs.fileName.value) {
+        this.fileCreation.inProgress = false
+      } else {
+        this.openCreateFileEditor()
+      }
     }
   }
 }
@@ -100,10 +141,8 @@ export default {
 
   ul {
     position: absolute;
-    border-radius: 0.2rem;
     list-style: none;
     display: none;
-    overflow: hidden;
     z-index: 1;
   }
 
@@ -119,7 +158,9 @@ export default {
 
   li {
     background: #f8f8f8;
+    border-radius: 0.2rem;
     display: flex;
+    overflow: hidden;
   }
 
   button,
@@ -128,7 +169,7 @@ export default {
 
     background: none;
     border: none;
-    border-radius: 0.2rem;
+    border-radius: 0;
 
     text-align: left;
 
@@ -156,8 +197,42 @@ export default {
     }
   }
 
-  input {
-    border: 1px solid black;
+  form {
+    display: flex;
+
+    input[type="text"] {
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.4);
+      }
+
+      &:focus {
+        background: white;
+        border: none;
+        border: 1px solid black;
+        border-right: none;
+        outline: none;
+      }
+    }
+
+    &.is-invalid {
+      input[type="text"] {
+        border-color: red;
+      }
+
+      &:focus-within {
+        input[type="submit"] {
+          background: red;
+          color: white;
+        }
+      }
+    }
+
+    &:focus-within {
+      input[type="submit"] {
+        background: black;
+        color: white;
+      }
+    }
   }
 
   &:hover ul {

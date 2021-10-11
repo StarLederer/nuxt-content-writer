@@ -17,22 +17,57 @@ app.use(express.json())
 
 // GET request
 app.get('/*', async (req, res) => {
-  const contents = await fs.readdir(path.resolve(config.rootDir + req.url))
-  res.status(200).send({
-    contents
-  })
+  try {
+    const dir = path.resolve(config.rootDir + req.url)
+    const contents = await fs.readdir(dir)
+    res.status(200).send({
+      contents
+    })
+  } catch (err: any) {
+    if (err.code === 'ENOENT') {
+      res.status(404).send({ contents: [] })
+    } else {
+      res.status(500).send()
+    }
+  }
 })
 
 // POST request
 app.post('/*', async (req, res) => {
   const filePath = path.resolve(config.rootDir + req.url)
+  const fileDir = path.dirname(filePath)
   const fileData = req.body
 
-  await fs.writeFile(filePath, JSON.stringify(fileData))
-  res.status(200)
+  try {
+    // Create fileDir if it does not exists
+    try {
+      fs.access(fileDir)
+    } catch (err: any) {
+      if (err.code === 'ENOENT') {
+        fs.mkdir(fileDir)
+      } else {
+        res.status(500).send()
+        return
+      }
+    }
+
+    // Write file
+    await fs.writeFile(filePath, JSON.stringify(fileData))
+    res.status(200).send()
+  } catch (err) {
+    res.status(500).send()
+  }
 })
 
 // DELETE request
+app.delete('/*', async (req, res) => {
+  const filePath = path.resolve(config.rootDir + req.url)
+
+  try {
+    await fs.unlink(filePath)
+    res.status(200).send()
+  } catch (err) { res.status(500).send() }
+})
 
 //
 //

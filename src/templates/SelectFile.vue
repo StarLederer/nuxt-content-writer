@@ -36,10 +36,14 @@ export default {
   name: 'SelectFile',
 
   props: {
-    storage: {
+    storageFile: {
       type: String,
       default: 'editor-storage',
       require: true
+    },
+    storageKey: {
+      type: String,
+      default: 'storage'
     },
     dir: {
       type: String,
@@ -70,12 +74,15 @@ export default {
     },
 
     async selectFile (fileName) {
-      await fetch(`/_editor/${this.storage}.json`, {
+      await fetch(`/_editor/${this.storageFile}.json`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ selected: `${this.dir}/${fileName}` })
+        body: JSON.stringify({
+          key: this.storageKey,
+          value: `${this.dir}/${fileName}`
+        })
       })
     },
 

@@ -1,8 +1,8 @@
 import StorageFile from './StorageFile'
 
-class StoregaFileManager {
-    filePaths: string[]
-    files: StorageFile[]
+class StorageFileManager {
+    private filePaths: string[]
+    private files: StorageFile[]
 
     constructor () {
       this.filePaths = []
@@ -23,4 +23,4 @@ class StoregaFileManager {
     }
 }
 
-export default StoregaFileManager
+export default StorageFileManager

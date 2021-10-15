@@ -2,9 +2,9 @@ import fs from 'fs/promises'
 import path from 'path'
 
 class StorageFile {
-    filePath: string
-    fileDir: string
-    fileData: any
+    private filePath: string
+    private fileDir: string
+    private fileData: any
 
     constructor (filePath: string) {
       this.filePath = filePath
@@ -12,8 +12,9 @@ class StorageFile {
       this.fileData = {}
     }
 
-    setField (key: string, value: any) {
+    async setField (key: string, value: any) {
       this.fileData[key] = value
+      await this.saveFile()
     }
 
     async saveFile () {

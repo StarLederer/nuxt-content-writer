@@ -151,6 +151,7 @@ export default {
     list-style: none;
     display: none;
     z-index: 1;
+    overflow: hidden;
   }
 
   .label,
@@ -205,39 +206,40 @@ export default {
   }
 
   form {
+    width: 100%;
     display: flex;
 
     input[type="text"] {
+        border: 1px solid transparent;
+
       &::placeholder {
         color: rgba(0, 0, 0, 0.4);
       }
 
       &:focus {
         background: white;
-        border: none;
-        border: 1px solid black;
-        border-right: none;
+        border-color: 1px solid black;
         outline: none;
       }
     }
 
-    &.is-invalid {
-      input[type="text"] {
-        border-color: red;
+    input[type="submit"] {
+      background: black;
+      color: white;
+
+      &:hover {
+        background: #222;
       }
+    }
+
+    &.is-invalid {
+      border-color: red;
 
       &:focus-within {
         input[type="submit"] {
           background: red;
           color: white;
         }
-      }
-    }
-
-    &:focus-within {
-      input[type="submit"] {
-        background: black;
-        color: white;
       }
     }
   }

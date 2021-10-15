@@ -12,6 +12,17 @@ class StorageFile {
       this.fileData = {}
     }
 
+    async loadFile () {
+      try {
+        const loadData = await fs.readFile(this.filePath, 'utf8')
+        this.fileData = JSON.parse(loadData)
+      } catch (err: any) {
+        if (err.code !== 'ENOENT') {
+          throw new Error(`Failed to read file ${this.filePath}`)
+        }
+      }
+    }
+
     async setField (key: string, value: any) {
       this.fileData[key] = value
       await this.saveFile()
@@ -25,7 +36,7 @@ class StorageFile {
         if (err.code === 'ENOENT') {
           fs.mkdir(this.fileDir)
         } else {
-          throw new Error('Failed to access file')
+          throw new Error(`Failed make directory ${this.fileDir}`)
         }
       }
 

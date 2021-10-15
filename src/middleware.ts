@@ -47,9 +47,8 @@ app.post('/*', async (req, res) => {
   const filePath = path.resolve(config.rootDir + req.url)
   const fileData = req.body
 
-  const file = fileManager.getFile(filePath)
-
   try {
+    const file = await fileManager.getFile(filePath)
     await file.setField(fileData.key, fileData.value)
   } catch (err) {
     res.status(500).send()
@@ -64,6 +63,7 @@ app.delete('/*', async (req, res) => {
 
   try {
     await fs.unlink(filePath)
+    fileManager.unlistFile(filePath)
     res.status(200).send()
   } catch (err) { res.status(500).send() }
 })

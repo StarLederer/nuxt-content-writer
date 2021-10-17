@@ -9,14 +9,13 @@ class StorageFileManager {
     this.files = []
   }
 
-  async getFile (filePath: string) {
+  getFile (filePath: string) {
     const i = this.filePaths.indexOf(filePath)
     if (i >= 0) {
       return this.files[i]
     }
 
     const newFile = new StorageFile(filePath)
-    await newFile.loadFile()
     this.files.push(newFile)
     this.filePaths.push(filePath)
 

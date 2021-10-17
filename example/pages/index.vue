@@ -65,8 +65,8 @@ export default {
       const selection = await $content('homepageArticles').fetch()
       const article1Name = selection.article1.replace(/\.[^/.]+$/, '')
       const article2Name = selection.article2.replace(/\.[^/.]+$/, '')
-      article1 = await $content(article1Name).fetch()
-      article2 = await $content(article2Name).fetch()
+      article1 = await $content('articles', article1Name).fetch()
+      article2 = await $content('articles', article2Name).fetch()
     } catch (err) {
       article1 = null
       article2 = null

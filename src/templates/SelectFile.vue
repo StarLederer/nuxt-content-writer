@@ -4,8 +4,12 @@
       <slot />
     </div>
     <ul>
-      <li v-for="file in files" :key="file">
-        <button @click="selectFile(file)">
+      <li
+        v-for="file in files"
+        :key="file"
+        :class="{ selected: file === selectedFile }"
+      >
+        <button class="primary" @click="selectFile(file)">
           {{ file }}
         </button>
         <button class="secondary" @click="deleteFile(file)">
@@ -18,8 +22,8 @@
           :class="{ 'is-invalid': fileCreation.isInvalid }"
           @submit="validateAndCreateFile"
         >
-          <input ref="fileName" type="text" placeholder="Name.txt">
-          <input type="submit" value="Y" class="secondary">
+          <input ref="fileName" class="primary" type="text" placeholder="Name.txt">
+          <input class="secondary" type="submit" value="Y">
         </form>
       </li>
       <li v-show="!fileCreation.inProgress">
@@ -58,19 +62,26 @@ export default {
         inProgress: false,
         isInvalid: false
       },
-      files: []
+      files: [],
+      selectedFile: ''
     }
   },
 
   mounted () {
-    this.fetchFiles()
+    this.fetchData()
   },
 
   methods: {
-    fetchFiles () {
+    fetchData () {
       fetch(`/_editor/${this.dir}`)
         .then(response => response.json())
         .then(data => (this.files = data.contents))
+
+      fetch(`/_editor/${this.storageFile}.json?key=${this.storageKey}`)
+        .then(response => response.text())
+        .then((data) => {
+          this.selectedFile = data
+        })
     },
 
     async selectFile (fileName) {
@@ -81,14 +92,17 @@ export default {
         },
         body: JSON.stringify({
           key: this.storageKey,
-          value: `${this.dir}/${fileName}`
+          value: `${fileName}`
         })
       })
+
+      document.activeElement.blur()
+      this.fetchData()
     },
 
     async deleteFile (fileName) {
       await fetch(`/_editor/${this.dir}/${fileName}`, { method: 'DELETE' })
-      this.fetchFiles()
+      this.fetchData()
     },
 
     async createFile (fileName) {
@@ -96,7 +110,7 @@ export default {
         method: 'POST'
       })
 
-      this.fetchFiles()
+      this.fetchData()
     },
 
     validateAndCreateFile (e) {
@@ -123,7 +137,7 @@ export default {
     },
 
     showSelector () {
-      this.fetchFiles()
+      this.fetchData()
 
       if (this.$refs.fileName !== document.activeElement) {
         this.fileCreation.inProgress = false
@@ -186,8 +200,8 @@ export default {
   }
 
   // List item contents
-  button,
-  input {
+  input,
+  button {
     padding: 0 1rem;
 
     background: none;
@@ -261,6 +275,16 @@ export default {
           color: white;
         }
       }
+    }
+  }
+
+  // Selected
+  li.selected {
+    background: #f4f4f4;
+
+    .primary {
+      color: black;
+      font-weight: bold;
     }
   }
 

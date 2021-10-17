@@ -215,7 +215,7 @@ h3 {
   color: rgba(0, 53, 67, 0.4);
 }
 
-._select-file form input {
+._select-file input {
   color: rgb(0, 53, 67);
   background: var(--primary-100);
 }
@@ -226,18 +226,26 @@ h3 {
   background: rgb(240, 240, 240);
 }
 
-._select-file form input[type="text"]:focus {
+._select-file input:hover {
+  background: #fff;
+}
+
+._select-file input[type="text"]::placeholder{
+  color: rgba(0, 53, 67, 0.4);
+}
+
+._select-file input[type="text"]:focus {
   background: #fff;
   border: 1px solid var(--primary-500);
   border-radius: 0.375rem 0 0 0.375rem;
 }
 
-._select-file form input[type="submit"] {
+._select-file input[type="submit"] {
   background: var(--primary-500);
   border-radius: 0 0.375rem 0.375rem 0;
 }
 
-._select-file form input[type="submit"]:hover {
+._select-file input[type="submit"]:hover {
   background: var(--primary-400);
 }
 </style>

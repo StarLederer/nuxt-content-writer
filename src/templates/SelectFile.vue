@@ -124,10 +124,9 @@ export default {
 
     showSelector () {
       this.fetchFiles()
-      if (!this.$refs.fileName.value) {
+
+      if (this.$refs.fileName !== document.activeElement) {
         this.fileCreation.inProgress = false
-      } else {
-        this.openCreateFileEditor()
       }
     }
   }
@@ -146,14 +145,6 @@ export default {
   display: inline-block;
   cursor: pointer;
 
-  ul {
-    position: absolute;
-    list-style: none;
-    display: none;
-    z-index: 1;
-    overflow: hidden;
-  }
-
   .label,
   li {
     height: 2rem;
@@ -164,24 +155,51 @@ export default {
     align-items: center;
   }
 
-  li {
+  // List
+  ul {
+    position: absolute;
+
     background: #f8f8f8;
     border-radius: 0.2rem;
-    display: flex;
+
+    list-style: none;
+
+    display: none;
+    z-index: 1;
     overflow: hidden;
   }
 
+  li {
+    border-radius: 0.2rem;
+    display: flex;
+    overflow: hidden;
+
+    &:first-child {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  // List item contents
   button,
   input {
     padding: 0 1rem;
 
     background: none;
+    color: #000b;
     border: none;
     border-radius: 0;
 
     text-align: left;
 
+    display: block;
     transition: 50ms;
+    cursor: pointer;
 
     &:first-child {
       flex: 1;
@@ -190,7 +208,7 @@ export default {
     &.secondary {
       width: 2rem;
       padding: 0;
-      color: #0008;
+      color: #0004;
       text-align: center;
     }
 
@@ -205,32 +223,34 @@ export default {
     }
   }
 
+  // Forms
+  input[type="text"] {
+    border: 1px solid transparent;
+    cursor: text;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.4);
+    }
+
+    &:focus {
+      background: white;
+      border-color: black;
+      outline: none;
+    }
+  }
+
+  input[type="submit"] {
+    background: black;
+    color: white;
+
+    &:hover {
+      background: #222;
+    }
+  }
+
   form {
     width: 100%;
     display: flex;
-
-    input[type="text"] {
-        border: 1px solid transparent;
-
-      &::placeholder {
-        color: rgba(0, 0, 0, 0.4);
-      }
-
-      &:focus {
-        background: white;
-        border-color: 1px solid black;
-        outline: none;
-      }
-    }
-
-    input[type="submit"] {
-      background: black;
-      color: white;
-
-      &:hover {
-        background: #222;
-      }
-    }
 
     &.is-invalid {
       border-color: red;
@@ -244,8 +264,12 @@ export default {
     }
   }
 
-  &:hover ul {
-    display: block;
+  // Hover reveal
+  &:hover,
+  &:focus-within {
+    ul {
+      display: block;
+    }
   }
 }
 </style>

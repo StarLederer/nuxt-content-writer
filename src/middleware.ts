@@ -37,22 +37,23 @@ async function jsonHandler (req: express.Request, res: express.Response) {
 
     if (keys) {
     // We have received at least one key
-      function getFromFileData (key: string): string {
+      function getFromFileData (key: string): any {
         const value = fileData[key] ?? ''
-        if (typeof value === 'string') { return value }
-        return ''
+        return value
       }
 
       if (Array.isArray(keys)) {
       // Keys is an array ?key=example1&key=example2
-        const values = []
+        const body: any = {}
         for (const key of keys) {
-          values.push(getFromFileData(key as string))
+          body[key as string] = getFromFileData(key as string)
         }
-        res.status(200).send({ values })
+        res.status(200).send(body)
       } else {
       // Keys is a single key
-        res.status(200).send(getFromFileData(keys as string))
+        const body: any = {}
+        body[keys as string] = getFromFileData(keys as string)
+        res.status(200).send(body)
       }
     } else {
     // We have not received any keys
@@ -82,19 +83,13 @@ async function dirHandler (req: express.Request, res: express.Response) {
 
 // GET request
 app.get('/*', async (req, res) => {
-  const regexJson = /\.json/
-  if (regexJson.test(req.path)) {
+  if (/\.json/.test(req.path)) {
     // requested a .json url
     jsonHandler(req, res)
   } else {
     // requested anything else
     await dirHandler(req, res)
   }
-})
-
-app.get(/\.json/, (_req, res) => {
-  console.log('json requested')
-  res.status(200).send()
 })
 
 // POST request

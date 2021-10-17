@@ -15,26 +15,38 @@ const nuxtModule: Module<ModuleOptions> = function () {
       handler: getMiddleware(options)
     })
 
-    // Dev editor component
+    // Dev editor components
     this.addTemplate({
-      fileName: 'editor/SelectFile.vue',
-      src: require.resolve('./templates/SelectFile.vue')
+      fileName: 'editor/SelectFile.dev.vue',
+      src: require.resolve('./templates/SelectFile.dev.vue')
+    })
+
+    this.addTemplate({
+      fileName: 'editor/SelectFiles.dev.vue',
+      src: require.resolve('./templates/SelectFiles.dev.vue')
+    })
+
+    // Dev plugin
+    this.addPlugin({
+      fileName: 'editor/plugin.js',
+      src: require.resolve('./templates/plugin.dev')
     })
   } else {
-    // Production editor compoent (empty)
+    // Production editor component (empty)
     this.addTemplate({
-      fileName: 'editor/SelectFile.vue',
-      src: require.resolve('./templates/SelectFile.prod.vue')
+      fileName: 'editor/Empty.prod.vue',
+      src: require.resolve('./templates/Empty.prod.vue')
+    })
+
+    // Production plugin
+    this.addPlugin({
+      fileName: 'editor/plugin.js',
+      src: require.resolve('./templates/plugin.prod')
     })
   }
+}
 
-  // Component loader plugin
-  this.addPlugin({
-    fileName: 'editor/test.js',
-    src: require.resolve('./templates/plugin')
-  })
-};
-(nuxtModule as any).meta = { name, version }
+;(nuxtModule as any).meta = { name, version }
 
 declare module '@nuxt/types' {
   interface NuxtConfig {

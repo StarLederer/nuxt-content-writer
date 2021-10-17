@@ -5,6 +5,14 @@
     </div>
     <ul>
       <li
+        v-if="!files.includes(selectedFile)"
+        class="selected"
+      >
+        <button class="primary">
+          {{ selectedFile }} (missing)
+        </button>
+      </li>
+      <li
         v-for="file in files"
         :key="file"
         :class="{ selected: file === selectedFile }"
@@ -37,8 +45,6 @@
 
 <script>
 export default {
-  name: 'SelectFile',
-
   props: {
     storageFile: {
       type: String,
@@ -78,13 +84,15 @@ export default {
         .then(data => (this.files = data.contents))
 
       fetch(`/_editor/${this.storageFile}.json?key=${this.storageKey}`)
-        .then(response => response.text())
+        .then(response => response.json())
         .then((data) => {
-          this.selectedFile = data
+          this.selectedFile = data[this.storageKey]
         })
     },
 
     async selectFile (fileName) {
+      this.selectedFile = fileName
+
       await fetch(`/_editor/${this.storageFile}.json`, {
         method: 'POST',
         headers: {
@@ -175,11 +183,13 @@ export default {
 
     background: #f8f8f8;
     border-radius: 0.2rem;
+    opacity: 0;
 
     list-style: none;
 
-    display: none;
+    transition: 50ms;
     z-index: 1;
+    pointer-events: none;
     overflow: hidden;
   }
 
@@ -292,7 +302,8 @@ export default {
   &:hover,
   &:focus-within {
     ul {
-      display: block;
+      opacity: 1;
+      pointer-events: all;
     }
   }
 }

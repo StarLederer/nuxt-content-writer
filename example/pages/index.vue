@@ -30,28 +30,49 @@
     </section>
 
     <main>
-      <h2>Try playing with the articles below</h2>
-      <article>
-        <SelectFile
-          :storage-file="'homepageArticles'"
-          :storage-key="'article1'"
-          :dir="'articles'"
-        >
-          Select article
-        </SelectFile>
-        <NuxtContent :document="article1" />
-      </article>
+      <section>
+        <h2>Try playing with the articles below</h2>
+        <article>
+          <SelectFile
+            :storage-file="'layout'"
+            :storage-key="'article1'"
+            :dir="'articles'"
+          >
+            Select article
+          </SelectFile>
+          <NuxtContent :document="article1" />
+        </article>
 
-      <article>
-        <SelectFile
-          :storage-file="'homepageArticles'"
-          :storage-key="'article2'"
-          :dir="'articles'"
+        <article>
+          <SelectFile
+            :storage-file="'layout'"
+            :storage-key="'article2'"
+            :dir="'articles'"
+          >
+            Select article
+          </SelectFile>
+          <NuxtContent :document="article2" />
+        </article>
+      </section>
+
+      <section>
+        <h2>Try rearranging cards</h2>
+        <SelectFiles
+          :storage-file="'layout'"
+          :storage-key="'cards'"
+          :dir="'cards'"
         >
-          Select article
-        </SelectFile>
-        <NuxtContent :document="article2" />
-      </article>
+          Arrange cards
+        </SelectFiles>
+        <div class="grid">
+          <article
+            v-for="card in cards"
+            :key="card.slug"
+          >
+            <NuxtContent :document="card" />
+          </article>
+        </div>
+      </section>
     </main>
   </div>
 </template>
@@ -59,20 +80,36 @@
 <script>
 export default {
   async asyncData ({ $content }) {
+    let layout
+    const cards = []
     let article1, article2
 
     try {
-      const selection = await $content('homepageArticles').fetch()
-      const article1Name = selection.article1.replace(/\.[^/.]+$/, '')
-      const article2Name = selection.article2.replace(/\.[^/.]+$/, '')
+      layout = await $content('layout').fetch()
+    } catch (err) { }
+
+    try {
+      const cardNames = layout.cards
+      for (let i = 0; i < cardNames.length; ++i) {
+        cards[i] = await $content(
+          'cards',
+          cardNames[i].replace(/\.[^/.]+$/, '')
+        ).fetch()
+      }
+    } catch (err) { }
+
+    try {
+      const article1Name = layout.article1.replace(/\.[^/.]+$/, '')
       article1 = await $content('articles', article1Name).fetch()
+    } catch (err) { }
+
+    try {
+      const article2Name = layout.article2.replace(/\.[^/.]+$/, '')
       article2 = await $content('articles', article2Name).fetch()
-    } catch (err) {
-      article1 = null
-      article2 = null
-    }
+    } catch (err) { }
 
     return {
+      cards,
       article1,
       article2
     }
@@ -137,6 +174,10 @@ section {
   margin-bottom: 2rem;
 }
 
+section:last-child {
+  margin-bottom: 0;
+}
+
 article {
   margin-bottom: 2rem;
 }
@@ -165,6 +206,21 @@ h3 {
   font-weight: 700;
 }
 
+.grid
+{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+}
+
+.grid > article
+{
+  margin: 0;
+  padding: 2rem;
+  background: rgba(250, 250, 250);
+  border-radius: 0.375rem;
+}
+
 /*
  * _select-file style
  *
@@ -189,7 +245,14 @@ h3 {
 
 ._select-file ul {
   background: rgb(250, 250, 250);
+  box-shadow: 0 0 0 transparent;
   border-radius: 0.375rem;
+
+}
+
+._select-file:hover ul {
+  box-shadow: 0 0.5rem 1rem rgba(0, 53, 67, 0.05);
+  transition: box-shadow 200ms, opacity 50ms;
 }
 
 ._select-file li {
@@ -198,7 +261,8 @@ h3 {
 }
 
 ._select-file button,
-._select-file input {
+._select-file input,
+._select-file .primary {
   padding: 0.625rem 1rem;
 
   color: rgb(0, 53, 67);
@@ -230,7 +294,7 @@ h3 {
   background: #fff;
 }
 
-._select-file input[type="text"]::placeholder{
+._select-file input[type="text"]::placeholder {
   color: rgba(0, 53, 67, 0.4);
 }
 

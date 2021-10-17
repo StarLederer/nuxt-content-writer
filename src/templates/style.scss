@@ -1,0 +1,200 @@
+._editor,
+._editor * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+._select-file {
+  display: inline-block;
+
+  .label,
+  li {
+    height: 2rem;
+  }
+
+  .label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .popup {
+    position: absolute;
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  // Lists
+  ul {
+    background: #f8f8f8;
+    border-radius: 0.2rem;
+    box-shadow: 0 0.1rem 0.2rem #0001;
+
+    list-style: none;
+
+    transition: 50ms;
+    overflow: hidden;
+
+    &:not(:first-child) {
+      margin-top: 0.5rem;
+    }
+  }
+
+  li {
+    border-radius: 0.2rem;
+    display: flex;
+    overflow: hidden;
+
+    &:first-child {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  // List item contents
+  .li-content {
+    padding: 0 1rem;
+
+    background: none;
+    color: #000b;
+    border: none;
+    border-radius: 0;
+
+    font-size: 0.8rem;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    transition: 50ms;
+    cursor: default;
+
+    &:first-child {
+      min-width: 8rem;
+      flex: 1;
+    }
+
+    // Intreactive
+    &.is-interactive {
+      cursor: pointer;
+
+      &:hover,
+      &:focus {
+        background: #f0f0f0;
+        color: #000;
+      }
+    }
+
+    // Secondary
+    &.is-secondary {
+      width: 2rem;
+      padding: 0;
+      color: #0004;
+      justify-content: center;
+      align-items: center;
+    }
+
+    // Title
+    &.is-title {
+      background: #fafafa;
+      color: #0004;
+    }
+  }
+
+  // Forms
+  form {
+    width: 100%;
+    background: #f0f0f0;
+    display: flex;
+
+    // Is invalid
+    &.is-invalid {
+      input[type="text"] {
+        outline-color: red;
+      }
+
+      input[type="submit"] {
+        background: red;
+        color: white;
+      }
+    }
+  }
+
+  input.li-content {
+    &[type="text"] {
+      cursor: text;
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.4);
+      }
+
+      &:focus {
+        background: white;
+      }
+    }
+
+    &[type="submit"] {
+      background: black;
+      color: white;
+
+      &:hover {
+        background: #222;
+        color: white;
+      }
+    }
+  }
+
+  // New file
+  .new-file {
+    width: 100%;
+    color: #0008;
+  }
+
+  // Li modifiers
+  li {
+    // Selected
+    &.is-selected {
+      background: #f4f4f4;
+
+      .li-content {
+        color: black;
+        font-weight: bold;
+      }
+    }
+
+    // Invalid
+    &.is-invalid {
+      background: #fbb;
+
+      .li-content {
+        color: #b00;
+        cursor: not-allowed;
+
+        &.is-interactive {
+          cursor: pointer;
+
+          &:hover,
+          &:focus {
+            background: #dd1010;
+            color: #b00;
+          }
+        }
+      }
+    }
+  }
+
+  // Hover reveal
+  &:hover,
+  &:focus-within {
+    .popup {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+}

@@ -9,6 +9,12 @@ const nuxtModule: Module<ModuleOptions> = function () {
   const options: NuxtOptions = this.nuxt.options
 
   if (options.dev) {
+    // Add dev css
+    this.addTemplate({
+      fileName: 'editor/style.scss',
+      src: require.resolve('./templates/style.scss')
+    })
+
     // Server middleware
     this.addServerMiddleware({
       path: '/_editor',
@@ -34,7 +40,7 @@ const nuxtModule: Module<ModuleOptions> = function () {
   } else {
     // Production editor component (empty)
     this.addTemplate({
-      fileName: 'editor/Empty.prod.vue',
+      fileName: 'editor/Empty.prod.vue.js',
       src: require.resolve('./templates/Empty.prod.vue')
     })
 

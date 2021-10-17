@@ -3,43 +3,56 @@
     <div class="label">
       <slot />
     </div>
-    <ul>
-      <li
-        v-if="!files.includes(selectedFile)"
-        class="selected"
-      >
-        <button class="primary">
-          {{ selectedFile }} (missing)
-        </button>
-      </li>
-      <li
-        v-for="file in files"
-        :key="file"
-        :class="{ selected: file === selectedFile }"
-      >
-        <button class="primary" @click="selectFile(file)">
-          {{ file }}
-        </button>
-        <button class="secondary" @click="deleteFile(file)">
-          X
-        </button>
-      </li>
-      <li v-show="fileCreation.inProgress">
-        <form
-          class="new-file-form"
-          :class="{ 'is-invalid': fileCreation.isInvalid }"
-          @submit="validateAndCreateFile"
+    <div class="popup">
+      <ul>
+        <li
+          v-if="selectedFile && !files.includes(selectedFile)"
+          class="is-selected is-invalid"
         >
-          <input ref="fileName" class="primary" type="text" placeholder="Name.txt">
-          <input class="secondary" type="submit" value="Y">
-        </form>
-      </li>
-      <li v-show="!fileCreation.inProgress">
-        <button class="new-file" @click="openCreateFileEditor">
-          New
-        </button>
-      </li>
-    </ul>
+          <button class="li-content is-interactive" @click="deselectFile">
+            {{ selectedFile }} (missing)
+          </button>
+        </li>
+        <li
+          v-for="file in files"
+          :key="file"
+          :class="{ 'is-selected': file === selectedFile }"
+        >
+          <button class="li-content is-interactive" @click="selectFile(file)">
+            {{ file }}
+          </button>
+          <button
+            class="li-content is-interactive is-secondary"
+            @click="deleteFile(file)"
+          >
+            X
+          </button>
+        </li>
+        <li v-show="fileCreation.inProgress">
+          <form
+            class="new-file-form"
+            :class="{ 'is-invalid': fileCreation.isInvalid }"
+            @submit="validateAndCreateFile"
+          >
+            <input
+              ref="fileName"
+              class="li-content"
+              type="text"
+              placeholder="Name.txt"
+            >
+            <input class="li-content is-interactive is-secondary" type="submit" value="Y">
+          </form>
+        </li>
+        <li v-show="!fileCreation.inProgress">
+          <button
+            class="li-content is-interactive new-file"
+            @click="openCreateFileEditor"
+          >
+            New
+          </button>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -108,6 +121,23 @@ export default {
       this.fetchData()
     },
 
+    async deselectFile () {
+      this.selectedFile = ''
+
+      await fetch(`/_editor/${this.storageFile}.json`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          key: this.storageKey
+        })
+      })
+
+      document.activeElement.blur()
+      this.fetchData()
+    },
+
     async deleteFile (fileName) {
       await fetch(`/_editor/${this.dir}/${fileName}`, { method: 'DELETE' })
       this.fetchData()
@@ -154,157 +184,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-._editor,
-._editor * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-._select-file {
-  display: inline-block;
-  cursor: pointer;
-
-  .label,
-  li {
-    height: 2rem;
-  }
-
-  .label {
-    display: flex;
-    align-items: center;
-  }
-
-  // List
-  ul {
-    position: absolute;
-
-    background: #f8f8f8;
-    border-radius: 0.2rem;
-    opacity: 0;
-
-    list-style: none;
-
-    transition: 50ms;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  li {
-    border-radius: 0.2rem;
-    display: flex;
-    overflow: hidden;
-
-    &:first-child {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
-
-    &:last-child {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-  }
-
-  // List item contents
-  input,
-  button {
-    padding: 0 1rem;
-
-    background: none;
-    color: #000b;
-    border: none;
-    border-radius: 0;
-
-    text-align: left;
-
-    display: block;
-    transition: 50ms;
-    cursor: pointer;
-
-    &:first-child {
-      flex: 1;
-    }
-
-    &.secondary {
-      width: 2rem;
-      padding: 0;
-      color: #0004;
-      text-align: center;
-    }
-
-    &.new-file {
-      width: 100%;
-      color: #0008;
-    }
-
-    &:hover {
-      background: #f0f0f0;
-      color: #000;
-    }
-  }
-
-  // Forms
-  input[type="text"] {
-    border: 1px solid transparent;
-    cursor: text;
-
-    &::placeholder {
-      color: rgba(0, 0, 0, 0.4);
-    }
-
-    &:focus {
-      background: white;
-      border-color: black;
-      outline: none;
-    }
-  }
-
-  input[type="submit"] {
-    background: black;
-    color: white;
-
-    &:hover {
-      background: #222;
-    }
-  }
-
-  form {
-    width: 100%;
-    display: flex;
-
-    &.is-invalid {
-      border-color: red;
-
-      &:focus-within {
-        input[type="submit"] {
-          background: red;
-          color: white;
-        }
-      }
-    }
-  }
-
-  // Selected
-  li.selected {
-    background: #f4f4f4;
-
-    .primary {
-      color: black;
-      font-weight: bold;
-    }
-  }
-
-  // Hover reveal
-  &:hover,
-  &:focus-within {
-    ul {
-      opacity: 1;
-      pointer-events: all;
-    }
-  }
-}
-</style>

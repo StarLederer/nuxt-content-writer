@@ -38,7 +38,7 @@ async function jsonHandler (req: express.Request, res: express.Response) {
     if (keys) {
     // We have received at least one key
       function getFromFileData (key: string): any {
-        const value = fileData[key] ?? ''
+        const value = fileData[key] ?? null
         return value
       }
 

@@ -65,10 +65,7 @@
           Arrange cards
         </SelectFiles>
         <div class="grid">
-          <article
-            v-for="card in cards"
-            :key="card.slug"
-          >
+          <article v-for="card in cards" :key="card.slug">
             <NuxtContent :document="card" />
           </article>
         </div>
@@ -86,7 +83,7 @@ export default {
 
     try {
       layout = await $content('layout').fetch()
-    } catch (err) { }
+    } catch (err) {}
 
     try {
       const cardNames = layout.cards
@@ -96,17 +93,17 @@ export default {
           cardNames[i].replace(/\.[^/.]+$/, '')
         ).fetch()
       }
-    } catch (err) { }
+    } catch (err) {}
 
     try {
       const article1Name = layout.article1.replace(/\.[^/.]+$/, '')
       article1 = await $content('articles', article1Name).fetch()
-    } catch (err) { }
+    } catch (err) {}
 
     try {
       const article2Name = layout.article2.replace(/\.[^/.]+$/, '')
       article2 = await $content('articles', article2Name).fetch()
-    } catch (err) { }
+    } catch (err) {}
 
     return {
       cards,
@@ -117,7 +114,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 /* Generic styles */
 :root {
   --primary-100: #e6fcf3;
@@ -206,15 +203,13 @@ h3 {
   font-weight: 700;
 }
 
-.grid
-{
+.grid {
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
 }
 
-.grid > article
-{
+.grid > article {
   margin: 0;
   padding: 2rem;
   background: rgba(250, 250, 250);
@@ -230,86 +225,114 @@ h3 {
  */
 ._select-file {
   margin-bottom: 1rem;
-}
 
-._select-file .label {
-  padding: 0.625rem 1rem;
+  .label {
+    padding: 0.625rem 1rem;
 
-  background: rgb(230, 240, 240);
-  color: rgb(0, 53, 67);
-  border-radius: 0.375rem;
+    background: rgb(230, 240, 240);
+    color: rgb(0, 53, 67);
+    border-radius: 0.375rem;
 
-  font-size: 0.875rem;
-  font-weight: 500;
-}
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
 
-._select-file ul {
-  background: rgb(250, 250, 250);
-  box-shadow: 0 0 0 transparent;
-  border-radius: 0.375rem;
+  ul {
+    background: rgb(250, 250, 250);
+    box-shadow: 0 0 0 transparent;
+    border-radius: 0.375rem;
+    margin-top: 0.5rem;
+  }
 
-}
+  li {
+    background: none;
+    border-radius: 0.375rem;
+  }
 
-._select-file:hover ul {
-  box-shadow: 0 0.5rem 1rem rgba(0, 53, 67, 0.05);
-  transition: box-shadow 200ms, opacity 50ms;
-}
+  .li-content {
+    padding: 0.625rem 1rem;
 
-._select-file li {
-  background: none;
-  border-radius: 0.375rem;
-}
+    color: rgb(0, 53, 67);
 
-._select-file button,
-._select-file input,
-._select-file .primary {
-  padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
 
-  color: rgb(0, 53, 67);
+    transition: 150ms;
 
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1;
+    &.is-secondary {
+      color: rgba(0, 53, 67, 0.4);
+    }
 
-  transition: 150ms;
-}
+    &.is-interactive {
+      :hover,
+      :focus {
+        color: #000;
+        background: rgb(240, 240, 240);
+      }
+    }
+  }
 
-._select-file button.secondary,
-._select-file button.new-file {
-  color: rgba(0, 53, 67, 0.4);
-}
+  // Forms
+  form {
+    input.li-content {
+      &[type="text"] {
+        outline-color: var(--primary-500);
+      }
 
-._select-file input {
-  color: rgb(0, 53, 67);
-  background: var(--primary-100);
-}
+      &[type="submit"] {
+        background: var(--primary-500);
 
-._select-file button:hover,
-._select-file input:hover {
-  color: #000;
-  background: rgb(240, 240, 240);
-}
+        &:hover,
+        &:focus {
+          background: var(--primary-400);
+        }
+      }
+    }
+  }
 
-._select-file input:hover {
-  background: #fff;
-}
+  // New file button
+  .new-file {
+    color: rgba(0, 53, 67, 0.4);
+  }
 
-._select-file input[type="text"]::placeholder {
-  color: rgba(0, 53, 67, 0.4);
-}
+  // Li modifiers
+  li {
+    // Selected
+    &.is-selected {
+      background: #f4f4f4;
 
-._select-file input[type="text"]:focus {
-  background: #fff;
-  border: 1px solid var(--primary-500);
-  border-radius: 0.375rem 0 0 0.375rem;
-}
+      .li-content {
+        color: black;
+        font-weight: bold;
+      }
+    }
 
-._select-file input[type="submit"] {
-  background: var(--primary-500);
-  border-radius: 0 0.375rem 0.375rem 0;
-}
+    // Invalid
+    &.is-invalid {
+      background: #fbb;
 
-._select-file input[type="submit"]:hover {
-  background: var(--primary-400);
+      .li-content {
+        color: #b00;
+
+        &.is-interactive {
+          &:hover,
+          &:focus {
+            background: #dd1010;
+            color: #b00;
+          }
+        }
+      }
+    }
+  }
+
+  // Reveal effects
+  &:hover,
+  &:focus-within {
+    ul {
+      box-shadow: 0 0.125rem 0.5rem rgba(0, 53, 67, 0.05);
+      transition: box-shadow 200ms, opacity 50ms;
+    }
+  }
 }
 </style>

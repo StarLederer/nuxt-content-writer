@@ -11,5 +11,12 @@ export default {
     '@nuxt/typescript-build',
     '@nuxt/content',
     '../src/module.ts'
-  ]
+  ],
+
+  contentWriter: {
+    customizeComponenets: [
+      // 'CreateDynamicPage'
+      // 'DeleteDynamicPage'
+    ]
+  }
 }

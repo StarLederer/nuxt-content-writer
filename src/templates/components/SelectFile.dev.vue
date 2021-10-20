@@ -117,6 +117,8 @@ export default {
         })
       })
 
+      this.$emit('update')
+
       document.activeElement.blur()
       this.fetchData()
     },
@@ -134,6 +136,8 @@ export default {
         })
       })
 
+      this.$emit('update')
+
       document.activeElement.blur()
       this.fetchData()
     },
@@ -147,7 +151,6 @@ export default {
       await fetch(`/_editor/${this.dir}/${fileName}`, {
         method: 'POST'
       })
-
       this.fetchData()
     },
 

@@ -21,3 +21,8 @@ Vue.component('SelectableContent', SelectableContent)
   import DeleteDynamicPage from './components/customizable/DeleteDynamicPage.dev.vue'
   Vue.component('DeleteDynamicPage', DeleteDynamicPage)
 <% } %>
+
+<% if (!options.customizeComponenets.includes('DynamicPageLoading')) { %>
+  import DynamicPageLoading from './components/customizable/DynamicPageLoading.dev.vue'
+  Vue.component('DynamicPageLoading', DynamicPageLoading)
+<% } %>

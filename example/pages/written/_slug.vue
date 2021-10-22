@@ -12,7 +12,6 @@ export default {
       header: {},
       contentFile: this.$nuxt.$route.path.substring(1, this.$nuxt.$route.path.length),
       sliceDir: 'written/slices'
-
     }
   }
 }

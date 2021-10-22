@@ -1,6 +1,6 @@
 <template>
   <main class="_create-dynamic-page">
-    <h3>Page does not exist {{ page }}</h3>
+    <h2>Page does not exist {{ page }}</h2>
     <p>Would you like to create it?</p>
     <button @click="$emit('createPage')">
       Create page

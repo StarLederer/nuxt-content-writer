@@ -2,7 +2,8 @@
   <div class="_editor">
     <slot v-if="pageExists" />
     <DeleteDynamicPage v-if="pageExists" @deletePage="deletePage" />
-    <CreateDynamicPage v-else :page="page" @createPage="createPage" />
+    <CreateDynamicPage v-if="!pageExists && !isLoading" :page="page" @createPage="createPage" />
+    <DynamicPageLoading v-if="isLoading" />
   </div>
 </template>
 
@@ -16,17 +17,16 @@ export default {
   },
 
   data () {
+    // Try get layout
+    this.$content(this.page).fetch().then(() => {
+      this.pageExists = true
+      this.isLoading = false
+    })
+
     return {
+      isLoading: true,
       pageExists: false
     }
-  },
-
-  async fetch () {
-    // Try get layout
-    try {
-      await this.$content(this.page).fetch()
-      this.pageExists = true
-    } catch (err) {}
   },
 
   methods: {

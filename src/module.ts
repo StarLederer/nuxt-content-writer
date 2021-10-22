@@ -2,7 +2,7 @@ import { Module, NuxtOptions } from '@nuxt/types'
 import { name, version } from '../package.json'
 import { getMiddleware } from './middleware'
 
-type CustomizableComponenets = 'CreateDynamicPage' | 'DeleteDynamicPage';
+type CustomizableComponenets = 'CreateDynamicPage' | 'DeleteDynamicPage' | 'DynamicPageLoading';
 
 export interface ModuleOptions {
   contentWriter: {
@@ -58,7 +58,8 @@ const nuxtModule: Module<ModuleOptions> = function () {
     // Customizable dev components
     const possibleCC: CustomizableComponenets[] = [
       'CreateDynamicPage',
-      'DeleteDynamicPage'
+      'DeleteDynamicPage',
+      'DynamicPageLoading'
     ]
 
     for (let i = 0; i < possibleCC.length; ++i) {

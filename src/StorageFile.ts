@@ -2,27 +2,27 @@ import fs from 'fs/promises'
 import path from 'path'
 
 class StorageFile {
-  private hasLoaded = true;
+  private hasLoaded = false;
 
   private filePath: string;
   private fileDir: string;
   private fileData: any;
-  private load: Promise<any>;
 
   constructor (filePath: string) {
     this.filePath = filePath
     this.fileDir = path.dirname(filePath)
     this.fileData = {}
 
-    this.load = fs.readFile(this.filePath, 'utf8').then((res) => {
-      this.hasLoaded = true
-      this.fileData = JSON.parse(res)
-    }).catch(() => {
-      this.hasLoaded = true
-      // if (err.code !== 'ENOENT') {
-      //   throw new Error(`Failed to read file ${this.filePath}`)
-      // }
-    })
+    fs.readFile(this.filePath, 'utf8')
+      .then((res) => {
+        this.fileData = JSON.parse(res)
+      })
+      .catch(() => {
+        throw new Error(`Failed to read file ${this.filePath}`)
+      })
+      .finally(() => {
+        this.hasLoaded = true
+      })
   }
 
   async setField (key: string, value: any) {
@@ -31,12 +31,21 @@ class StorageFile {
   }
 
   async getData () {
-    if (this.hasLoaded) {
-      return this.fileData
-    } else {
-      const res = JSON.parse(await this.load)
-      return res
+    while (!this.hasLoaded) {
+      await new Promise(resolve => setTimeout(resolve, 10))
     }
+    return this.fileData
+
+    // For some reason, this does not work
+    // hasLoaded is false at the time of checking the if statement
+    // but then it turns out that the promise is already fulfilled.
+    // I gues it getst fulfilled jsut between the two operations somehow
+    // if (this.hasLoaded) {
+    //   return this.fileData
+    // } else {
+    //   const res = JSON.parse(await this.load)
+    //   return res
+    // }
   }
 
   async saveFile () {

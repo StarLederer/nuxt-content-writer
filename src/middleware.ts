@@ -29,8 +29,9 @@ app.use(express.json())
 async function jsonHandler (req: express.Request, res: express.Response) {
   try {
     const filePath = path.resolve(config.rootDir + req.path)
+    const fileExists = await fileManager.checkFileExists(filePath)
 
-    if (await fileManager.checkFileExists(filePath)) {
+    if (fileExists) {
       const file = fileManager.getFile(filePath)
       const fileData = await file.getData()
 
@@ -38,34 +39,55 @@ async function jsonHandler (req: express.Request, res: express.Response) {
       const keys = req.query.key
 
       if (keys) {
-      // We have received at least one key
+        // We have received at least one key
+        function navigateObject (data: any, navigator: string): any {
+          let subnavigator = ''
+          let arrayMode = false
+          let arrayI = ''
+          for (let i = 0; i <= navigator.length; ++i) {
+            if (arrayMode) {
+              if (navigator[i] === ']') {
+                arrayMode = false
+                return navigateObject(data[subnavigator][parseInt(arrayI, 10)], navigator.substring(i + 2))
+              } else {
+                arrayI += navigator[i]
+              }
+            } else if (i >= navigator.length) {
+              return data[subnavigator] ?? data
+            } else if (navigator[i] === '.') {
+              return navigateObject(data[subnavigator], navigator.substring(i + 1))
+            } else if (navigator[i] === '[') {
+              arrayMode = true
+            } else { subnavigator += navigator[i] }
+          }
+        }
+
         function getFromFileData (key: string): any {
-          const value = fileData[key] ?? null
+          const value = navigateObject(fileData, key) ?? null
           return value
         }
 
         if (Array.isArray(keys)) {
-        // Keys is an array ?key=example1&key=example2
-          const body: any = {}
-          for (const key of keys) {
-            body[key as string] = getFromFileData(key as string)
+          // Keys is an array ?key=example1&key=example2
+          const values = []
+          for (let i = 0; i < keys.length; ++i) {
+            values[i] = getFromFileData(keys[i] as string)
           }
-          res.status(200).send(body)
+          console.log(values)
+          res.status(200).send({ values })
         } else {
-        // Keys is a single key
-          const body: any = {}
-          body[keys as string] = getFromFileData(keys as string)
-          res.status(200).send(body)
+          // Keys is a single key
+          res.status(200).send({ value: getFromFileData(keys as string) })
         }
       } else {
-      // We have not received any keys
+        // We have not received any keys
         res.status(200).send(fileData)
       }
     } else {
       res.status(404).send({})
     }
   } catch (err: any) {
-    res.status(500).send({})
+    res.status(500).send({ err: 'err' })
   }
 }
 

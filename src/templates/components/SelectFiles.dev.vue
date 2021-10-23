@@ -141,12 +141,12 @@ export default {
     fetchData () {
       fetch(`/_editor/${this.dir}`)
         .then(response => response.json())
-        .then(data => (this.files = data.contents))
+        .then((data) => { this.files = data.contents })
 
       fetch(`/_editor/${this.storageFile}.json?key=${this.storageKey}`)
         .then(response => response.json())
         .then((data) => {
-          this.selectedFiles = data[this.storageKey] ?? []
+          this.selectedFiles = data.value ?? []
         })
     },
 

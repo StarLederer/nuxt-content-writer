@@ -2,6 +2,7 @@ import * as fs from 'fs/promises'
 import * as path from 'path'
 import express from 'express'
 import { NuxtOptions } from '@nuxt/types'
+import navigateObject from './navigateObject'
 import StorageFileManager from './StorageFileManager'
 
 const config = {
@@ -40,28 +41,6 @@ async function jsonHandler (req: express.Request, res: express.Response) {
 
       if (keys) {
         // We have received at least one key
-        function navigateObject (data: any, navigator: string): any {
-          let subnavigator = ''
-          let arrayMode = false
-          let arrayI = ''
-          for (let i = 0; i <= navigator.length; ++i) {
-            if (arrayMode) {
-              if (navigator[i] === ']') {
-                arrayMode = false
-                return navigateObject(data[subnavigator][parseInt(arrayI, 10)], navigator.substring(i + 2))
-              } else {
-                arrayI += navigator[i]
-              }
-            } else if (i >= navigator.length) {
-              return data[subnavigator] ?? data
-            } else if (navigator[i] === '.') {
-              return navigateObject(data[subnavigator], navigator.substring(i + 1))
-            } else if (navigator[i] === '[') {
-              arrayMode = true
-            } else { subnavigator += navigator[i] }
-          }
-        }
-
         function getFromFileData (key: string): any {
           const value = navigateObject(fileData, key) ?? null
           return value
@@ -73,7 +52,6 @@ async function jsonHandler (req: express.Request, res: express.Response) {
           for (let i = 0; i < keys.length; ++i) {
             values[i] = getFromFileData(keys[i] as string)
           }
-          console.log(values)
           res.status(200).send({ values })
         } else {
           // Keys is a single key

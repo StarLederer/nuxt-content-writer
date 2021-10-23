@@ -26,7 +26,14 @@ class StorageFile {
   }
 
   async setField (key: string, value: any) {
-    this.fileData[key] = value
+    let a = 'this.fileData.' + key + ' = '
+    if (typeof value === 'string') {
+      a += '"' + value + '";'
+    } else {
+      a += 'value;'
+    }
+    // eslint-disable-next-line no-eval
+    eval(a)
     await this.saveFile()
   }
 

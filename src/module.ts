@@ -36,6 +36,14 @@ const nuxtModule: Module<ModuleOptions> = function () {
     })
   }
 
+  //
+  //
+  // Add common js
+  this.addTemplate({
+    fileName: 'contentWriter/navigateObject.js',
+    src: require.resolve('./templates/navigateObject.js')
+  })
+
   if (options.dev) {
     //
     //

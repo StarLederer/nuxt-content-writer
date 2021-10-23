@@ -7,6 +7,8 @@ export default {
     ]
   },
 
+  css: ['@assets/style.scss'],
+
   modules: [
     // '@nuxt/typescript-build',
     '@nuxt/content',

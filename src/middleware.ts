@@ -29,35 +29,40 @@ app.use(express.json())
 async function jsonHandler (req: express.Request, res: express.Response) {
   try {
     const filePath = path.resolve(config.rootDir + req.path)
-    const file = fileManager.getFile(filePath)
-    const fileData = await file.getData()
 
-    // Get keys from query ?key=example
-    const keys = req.query.key
+    if (await fileManager.checkFileExists(filePath)) {
+      const file = fileManager.getFile(filePath)
+      const fileData = await file.getData()
 
-    if (keys) {
-    // We have received at least one key
-      function getFromFileData (key: string): any {
-        const value = fileData[key] ?? null
-        return value
-      }
+      // Get keys from query ?key=example
+      const keys = req.query.key
 
-      if (Array.isArray(keys)) {
-      // Keys is an array ?key=example1&key=example2
-        const body: any = {}
-        for (const key of keys) {
-          body[key as string] = getFromFileData(key as string)
+      if (keys) {
+      // We have received at least one key
+        function getFromFileData (key: string): any {
+          const value = fileData[key] ?? null
+          return value
         }
-        res.status(200).send(body)
+
+        if (Array.isArray(keys)) {
+        // Keys is an array ?key=example1&key=example2
+          const body: any = {}
+          for (const key of keys) {
+            body[key as string] = getFromFileData(key as string)
+          }
+          res.status(200).send(body)
+        } else {
+        // Keys is a single key
+          const body: any = {}
+          body[keys as string] = getFromFileData(keys as string)
+          res.status(200).send(body)
+        }
       } else {
-      // Keys is a single key
-        const body: any = {}
-        body[keys as string] = getFromFileData(keys as string)
-        res.status(200).send(body)
+      // We have not received any keys
+        res.status(200).send(fileData)
       }
     } else {
-    // We have not received any keys
-      res.status(200).send(fileData)
+      res.status(404).send({})
     }
   } catch (err: any) {
     res.status(500).send({})
@@ -85,7 +90,7 @@ async function dirHandler (req: express.Request, res: express.Response) {
 app.get('/*', async (req, res) => {
   if (/\.json/.test(req.path)) {
     // requested a .json url
-    jsonHandler(req, res)
+    await jsonHandler(req, res)
   } else {
     // requested anything else
     await dirHandler(req, res)

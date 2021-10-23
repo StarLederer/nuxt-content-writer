@@ -6,7 +6,7 @@
       :storage-key="storageKey"
       @update="$fetch()"
     >
-      Select slice
+      Select content
     </SelectFile>
     <NuxtContent :document="content" />
   </div>

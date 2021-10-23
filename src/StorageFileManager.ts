@@ -1,3 +1,4 @@
+import fs from 'fs/promises'
 import StorageFile from './StorageFile'
 
 class StorageFileManager {
@@ -7,6 +8,15 @@ class StorageFileManager {
   constructor () {
     this.filePaths = []
     this.files = []
+  }
+
+  async checkFileExists (filePath: string) : Promise<boolean> {
+    try {
+      await fs.stat(filePath)
+      return true
+    } catch (err) { }
+
+    return false
   }
 
   getFile (filePath: string) {

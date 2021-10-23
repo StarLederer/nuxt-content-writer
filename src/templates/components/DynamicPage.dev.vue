@@ -18,13 +18,20 @@ export default {
 
   data () {
     // Try get layout
-    this.$content(this.page).fetch().then(() => {
-      this.pageExists = true
-      this.isLoading = false
-    }).catch(() => {
-      this.pageExists = false
-      this.isLoading = false
-    })
+    fetch(`/_editor/${this.page}.json`)
+      .then((res) => {
+        if (res.status === 200) {
+          this.pageExists = true
+        } else {
+          this.pageExists = false
+        }
+      })
+      .catch(() => {
+        this.pageExists = false
+      })
+      .finally(() => {
+        this.isLoading = false
+      })
 
     return {
       isLoading: true,

@@ -19,6 +19,7 @@
 - Quick wrapper for NuxtContent to load and select content easily
 - Create, edit and delete pages visually
 - Minimum production build size impact
+- A backend API at /_editor that accepts GET, POST and DELETE requests and can traverse json files using [object-path](https://github.com/mariocasciaro/object-path)
 
 ## Setup
 

@@ -49,13 +49,28 @@ yarn add nuxt-content-writer # or npm install nuxt-content-writer
 
 There is no guide yet but you can see how to use the available components, create a visual editor for dyanmic pages and customize editors in [the eample](https://github.com/HermanLederer/nuxt-content-writer).
 
-If you would like to explore the source code it is usseful to know that files that end with .dev are not included in the production build at all, and files with .prod are not included in dev at all. Similarly to that, css classes that start with an _ are never found in the production build. [The eample](https://github.com/HermanLederer/nuxt-content-writer) still adds costumization to those classes in production mode, but that was done to make the example simpler. Ideally you want to have a local plugin in your Nuxt app that only inludes these customizations in dev mode.
+If you would like to explore the source code it is usseful to know that files that end with .dev are not included in the production build at all, and files with .prod are not included in dev at all. Similarly to that, css classes that start with an _ are never found in the production build. [The eample](https://github.com/HermanLederer/nuxt-content-writer) still adds costumization to those classes in production mode but that is done to make the example simpler. Ideally you want to have a local plugin in your Nuxt app that only inludes these customizations in dev mode.
 
-## Development
+To checkout the example
 
 1. Clone this repository
-2. Install dependencies using `yarn install`
-3. Start development server using `yarn dev`
+
+```bash
+git clone https://github.com/HermanLederer/nuxt-content-writer.git
+cd nuxt-content-writer
+```
+
+2. Install dependencies
+
+```bash
+yarn
+```
+
+3. Start development server
+
+```bash
+yarn dev
+```
 
 ## License
 

@@ -14,22 +14,29 @@
 
 - A file picker component
 - Delete or create new files
-- Renaming files (coming soon)
-- Customizable editors (coming in the future)
+- Rename files (coming soon)
+- Customizable editors
+- Quick wrapper for NuxtContent to load and select content easily
+- Create, edit and delete pages visually
+- Minimum production build size impact
 
 ## Setup
 
-1. Add `nuxt-content-writer` dependency to your project
+1. Add `nuxt-content-writer` and its dependencies to your project
 
 ```bash
-yarn add nuxt-editor # or npm install nuxt-editor
+yarn add @nuxt/content # or npm install @nuxt/content
+yarn add @nuxtjs/axios # or npm install @nuxtjs/axios 
+yarn add nuxt-content-writer # or npm install nuxt-content-writer
 ```
 
-2. Add `nuxt-content-writer` to the `modules` section of `nuxt.config.js`
+2. Add `nuxt-content-writer` and its dependencies to the `modules` section of `nuxt.config.js`
 
 ```js
 {
   modules: [
+    '@nuxt/content',
+    '@nuxtjs/axios',
     'nuxt-content-writer',
   ],
   nuxtEditor: {
@@ -37,6 +44,12 @@ yarn add nuxt-editor # or npm install nuxt-editor
   }
 }
 ```
+
+## How to use
+
+There is no guide yet but you can see how to use the available components, create a visual editor for dyanmic pages and customize editors in [the eample](https://github.com/HermanLederer/nuxt-content-writer).
+
+If you would like to explore the source code it is usseful to know that files that end with .dev are not included in the production build at all, and files with .prod are not included in dev at all. Similarly to that, css classes that start with an _ are never found in the production build. [The eample](https://github.com/HermanLederer/nuxt-content-writer) still adds costumization to those classes in production mode, but that was done to make the example simpler. Ideally you want to have a local plugin in your Nuxt app that only inludes these customizations in dev mode.
 
 ## Development
 

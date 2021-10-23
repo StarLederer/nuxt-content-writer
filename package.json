@@ -32,12 +32,15 @@
   },
   "dependencies": {
     "@nuxt/content": "^1.14.0",
+    "@nuxtjs/axios": "^5.13.6",
     "defu": "latest",
     "express": "^4.17.1",
+    "object-path": "^0.11.8",
     "sass": "^1.42.1",
     "upath": "latest"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.8",
     "@babel/plugin-transform-runtime": "latest",
     "@babel/preset-env": "latest",
     "@babel/preset-typescript": "latest",
@@ -47,6 +50,7 @@
     "@nuxtjs/eslint-config-typescript": "latest",
     "@siroc/jest-preset": "latest",
     "@types/jest": "latest",
+    "@types/object-path": "^0.11.1",
     "babel-eslint": "latest",
     "babel-jest": "latest",
     "eslint": "latest",
@@ -54,6 +58,8 @@
     "nuxt-edge": "latest",
     "playwright": "latest",
     "siroc": "latest",
-    "standard-version": "latest"
+    "standard-version": "latest",
+    "typescript": "^4.4.4",
+    "webpack": "^4.46.0"
   }
 }

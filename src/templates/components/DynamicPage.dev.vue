@@ -2,7 +2,11 @@
   <div class="_editor">
     <slot v-if="pageExists" />
     <DeleteDynamicPage v-if="pageExists" @deletePage="deletePage" />
-    <CreateDynamicPage v-if="!pageExists && !isLoading" :page="page" @createPage="createPage" />
+    <CreateDynamicPage
+      v-if="!pageExists && !isLoading"
+      :page="page"
+      @createPage="createPage"
+    />
     <DynamicPageLoading v-if="isLoading" />
   </div>
 </template>
@@ -18,13 +22,10 @@ export default {
 
   data () {
     // Try get layout
-    fetch(`/_editor/${this.page}.json`)
-      .then((res) => {
-        if (res.status === 200) {
-          this.pageExists = true
-        } else {
-          this.pageExists = false
-        }
+    this.$axios
+      .$get(`/_editor/${this.page}.json`)
+      .then(() => {
+        this.pageExists = true
       })
       .catch(() => {
         this.pageExists = false
@@ -43,15 +44,9 @@ export default {
     async createPage () {
       this.isLoading = true
 
-      await fetch(`/_editor/${this.page}.json`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          key: 'layout',
-          value: []
-        })
+      await this.$axios.$post(`/_editor/${this.page}.json`, {
+        key: 'layout',
+        value: []
       })
 
       this.pageExists = true
@@ -61,9 +56,7 @@ export default {
     async deletePage () {
       this.isLoading = true
 
-      await fetch(`/_editor/${this.page}.json`, {
-        method: 'DELETE'
-      })
+      await this.$axios.$delete(`/_editor/${this.page}.json`)
 
       this.pageExists = false
       this.isLoading = false

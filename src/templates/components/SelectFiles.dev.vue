@@ -182,27 +182,19 @@ export default {
     },
 
     async postUpdate () {
-      await fetch(`/_editor/${this.storageFile}.json`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          key: this.storageKey,
-          value: this.selectedFiles
-        })
+      await this.$axios.$post(`/_editor/${this.storageFile}.json`, {
+        key: this.storageKey,
+        value: this.selectedFiles
       })
     },
 
     async deleteFile (fileName) {
-      await fetch(`/_editor/${this.dir}/${fileName}`, { method: 'DELETE' })
+      await this.$axios.$delete(`/_editor/${this.dir}/${fileName}`)
       this.fetchData()
     },
 
     async createFile (fileName) {
-      await fetch(`/_editor/${this.dir}/${fileName}`, {
-        method: 'POST'
-      })
+      await this.$axios.$post(`/_editor/${this.dir}/${fileName}`)
 
       this.fetchData()
     },

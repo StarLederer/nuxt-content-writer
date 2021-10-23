@@ -8,8 +8,9 @@ export default {
   },
 
   modules: [
-    '@nuxt/typescript-build',
+    // '@nuxt/typescript-build',
     '@nuxt/content',
+    '@nuxtjs/axios',
     '../src/module.ts'
   ],
 

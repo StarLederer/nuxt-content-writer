@@ -2,7 +2,7 @@ import * as fs from 'fs/promises'
 import * as path from 'path'
 import express from 'express'
 import { NuxtOptions } from '@nuxt/types'
-import navigateObject from './navigateObject'
+import objectPath from 'object-path'
 import StorageFileManager from './StorageFileManager'
 
 const config = {
@@ -42,7 +42,7 @@ async function jsonHandler (req: express.Request, res: express.Response) {
       if (keys) {
         // We have received at least one key
         function getFromFileData (key: string): any {
-          const value = navigateObject(fileData, key) ?? null
+          const value = objectPath.get(fileData, key)
           return value
         }
 

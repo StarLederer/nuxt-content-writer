@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import navigateObject from '../navigateObject.js'
+import objectPath from 'object-path'
 
 export default {
   props: {
@@ -45,7 +45,7 @@ export default {
     } catch (err) {}
 
     try {
-      const contentName = navigateObject(file, this.storageKey).replace(/\.[^/.]+$/, '')
+      const contentName = objectPath.get(file, this.storageKey).replace(/\.[^/.]+$/, '')
       this.content = await this.$content(`${this.dir}/${contentName}`).fetch()
     } catch (err) {}
   }

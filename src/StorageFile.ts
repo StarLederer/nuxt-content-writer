@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
+import objectPath from 'object-path'
 
 class StorageFile {
   private hasLoaded = false;
@@ -17,8 +18,8 @@ class StorageFile {
       .then((res) => {
         this.fileData = JSON.parse(res)
       })
-      .catch(() => {
-        throw new Error(`Failed to read file ${this.filePath}`)
+      .catch((err: any) => {
+        if (err.code !== 'ENOENT') { throw err }
       })
       .finally(() => {
         this.hasLoaded = true
@@ -26,14 +27,7 @@ class StorageFile {
   }
 
   async setField (key: string, value: any) {
-    let a = 'this.fileData.' + key + ' = '
-    if (typeof value === 'string') {
-      a += '"' + value + '";'
-    } else {
-      a += 'value;'
-    }
-    // eslint-disable-next-line no-eval
-    eval(a)
+    objectPath.set(this.fileData, key, value)
     await this.saveFile()
   }
 

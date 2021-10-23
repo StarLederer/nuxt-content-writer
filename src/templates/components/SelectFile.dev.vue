@@ -40,7 +40,11 @@
               type="text"
               placeholder="Name.txt"
             >
-            <input class="li-content is-interactive is-secondary" type="submit" value="Y">
+            <input
+              class="li-content is-interactive is-secondary"
+              type="submit"
+              value="Y"
+            >
           </form>
         </li>
         <li v-show="!fileCreation.inProgress">
@@ -90,7 +94,9 @@ export default {
     fetchData () {
       fetch(`/_editor/${this.dir}`)
         .then(response => response.json())
-        .then((data) => { this.files = data.contents })
+        .then((data) => {
+          this.files = data.contents
+        })
 
       fetch(`/_editor/${this.storageFile}.json?key=${this.storageKey}`)
         .then(response => response.json())
@@ -122,14 +128,8 @@ export default {
     async deselectFile () {
       this.selectedFile = ''
 
-      await fetch(`/_editor/${this.storageFile}.json`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          key: this.storageKey
-        })
+      await this.$axios.$post(`/_editor/${this.storageFile}.json`, {
+        key: this.storageKey
       })
 
       this.$emit('update')
@@ -139,14 +139,12 @@ export default {
     },
 
     async deleteFile (fileName) {
-      await fetch(`/_editor/${this.dir}/${fileName}`, { method: 'DELETE' })
+      await this.$axios.$delete(`/_editor/${this.dir}/${fileName}`)
       this.fetchData()
     },
 
     async createFile (fileName) {
-      await fetch(`/_editor/${this.dir}/${fileName}`, {
-        method: 'POST'
-      })
+      await this.$axios.$post(`/_editor/${this.dir}/${fileName}`)
       this.fetchData()
     },
 

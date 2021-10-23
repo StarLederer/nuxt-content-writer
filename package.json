@@ -33,6 +33,7 @@
   "dependencies": {
     "@nuxt/content": "^1.14.0",
     "@nuxtjs/axios": "^5.13.6",
+    "cors": "^2.8.5",
     "defu": "latest",
     "express": "^4.17.1",
     "object-path": "^0.11.8",
@@ -49,6 +50,7 @@
     "@nuxt/typescript-build": "latest",
     "@nuxtjs/eslint-config-typescript": "latest",
     "@siroc/jest-preset": "latest",
+    "@types/cors": "^2.8.12",
     "@types/jest": "latest",
     "@types/object-path": "^0.11.1",
     "babel-eslint": "latest",

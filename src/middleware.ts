@@ -1,6 +1,7 @@
 import * as fs from 'fs/promises'
 import * as path from 'path'
 import express from 'express'
+import cors from 'cors'
 import { NuxtOptions } from '@nuxt/types'
 import objectPath from 'object-path'
 import StorageFileManager from './StorageFileManager'
@@ -21,6 +22,7 @@ const fileManager = new StorageFileManager()
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 //
 //

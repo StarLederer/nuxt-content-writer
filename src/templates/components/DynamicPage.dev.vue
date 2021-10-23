@@ -49,8 +49,10 @@ export default {
         value: []
       })
 
-      this.pageExists = true
-      this.isLoading = false
+      setTimeout(() => {
+        this.pageExists = true
+        this.isLoading = false
+      }, 10)
     },
 
     async deletePage () {

@@ -21,6 +21,9 @@ export default {
     this.$content(this.page).fetch().then(() => {
       this.pageExists = true
       this.isLoading = false
+    }).catch(() => {
+      this.pageExists = false
+      this.isLoading = false
     })
 
     return {
@@ -31,7 +34,7 @@ export default {
 
   methods: {
     async createPage () {
-      this.pageExists = true
+      this.isLoading = true
 
       await fetch(`/_editor/${this.page}.json`, {
         method: 'POST',
@@ -44,16 +47,19 @@ export default {
         })
       })
 
-      this.$fetch()
+      this.pageExists = true
+      this.isLoading = false
     },
 
     async deletePage () {
+      this.isLoading = true
+
       await fetch(`/_editor/${this.page}.json`, {
         method: 'DELETE'
       })
 
       this.pageExists = false
-      this.$forceUpdate()
+      this.isLoading = false
     }
   }
 }

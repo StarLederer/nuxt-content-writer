@@ -2,7 +2,7 @@ import fs from 'fs/promises'
 import path from 'path'
 
 class StorageFile {
-  private hasLoaded = false;
+  private hasLoaded = true;
 
   private filePath: string;
   private fileDir: string;
@@ -14,12 +14,10 @@ class StorageFile {
     this.fileDir = path.dirname(filePath)
     this.fileData = {}
 
-    this.load = fs.readFile(this.filePath, 'utf8')
-    this.load.then((res) => {
+    this.load = fs.readFile(this.filePath, 'utf8').then((res) => {
       this.hasLoaded = true
       this.fileData = JSON.parse(res)
-    })
-    this.load.catch(() => {
+    }).catch(() => {
       this.hasLoaded = true
       // if (err.code !== 'ENOENT') {
       //   throw new Error(`Failed to read file ${this.filePath}`)

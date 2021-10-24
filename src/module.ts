@@ -22,28 +22,23 @@ const nuxtModule: Module<ModuleOptions> = function () {
   // Make it easier to addTemplate
   const that = this
 
-  function addDevComponenet (name: string) {
+  function addTemplate (name: string) {
     that.addTemplate({
       fileName: `contentWriter/${name}`,
       src: require.resolve(`./templates/${name}`)
     })
   }
 
-  function addProdComponenet (name: string) {
-    that.addTemplate({
-      fileName: `contentWriter/${name}`,
-      src: require.resolve(`./templates/${name}`)
-    })
-  }
+  //
+  //
+  // Add common components
+  addTemplate('components/SelectableContent.comm.vue')
 
   if (options.dev) {
     //
     //
     // Add dev css
-    this.addTemplate({
-      fileName: 'contentWriter/style.scss',
-      src: require.resolve('./templates/style.scss')
-    })
+    addTemplate('style.scss')
 
     //
     //
@@ -64,17 +59,17 @@ const nuxtModule: Module<ModuleOptions> = function () {
 
     for (let i = 0; i < possibleCC.length; ++i) {
       if (!moduleOptions.customizeComponenets.includes(possibleCC[i])) {
-        addDevComponenet(`components/customizable/${possibleCC[i]}.dev.vue`)
+        addTemplate(`components/customizable/${possibleCC[i]}.dev.vue`)
       }
     }
 
     //
     //
     // Add dev components
-    addDevComponenet('components/DynamicPage.dev.vue')
-    addDevComponenet('components/SelectableContent.dev.vue')
-    addDevComponenet('components/SelectFile.dev.vue')
-    addDevComponenet('components/SelectFiles.dev.vue')
+    addTemplate('components/DynamicPage.dev.vue')
+    addTemplate('components/SelectableContent.dev.vue')
+    addTemplate('components/SelectFile.dev.vue')
+    addTemplate('components/SelectFiles.dev.vue')
 
     //
     //
@@ -88,9 +83,8 @@ const nuxtModule: Module<ModuleOptions> = function () {
     //
     //
     // Add production components
-    addProdComponenet('components/Empty.prod.vue.js')
-    addProdComponenet('components/Passthrough.prod.vue')
-    addProdComponenet('components/SelectableContent.prod.vue')
+    addTemplate('components/Empty.prod.vue.js')
+    addTemplate('components/Passthrough.prod.vue')
 
     //
     //
